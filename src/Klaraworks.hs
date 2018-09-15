@@ -1,6 +1,9 @@
 module Klaraworks
-    ( someFunc
+    ( runServer
     ) where
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+import Data.Text
+import Klaraworks.Api
+
+runServer :: Text -> IO ()
+runServer path = putStrLn "Nyaan"
