@@ -16,13 +16,27 @@ description:         Please see the README on GitHub at <https://github.com/kiri
 
 dependencies:
 - base >= 4.7 && < 5
+- aeson
+- extensible
+- lens
+- servant
+- servant-server
+- persistent
+- persistent-template
+- persistent-sqlite
+- text
+- time
+- wai
+- wai-app-static
+- wai-logger
+- warp
 
 library:
   source-dirs: src
 
 executables:
   klaraworks:
-    main:                Klaraworks.hs
+    main:                Main.hs
     source-dirs:         app
     ghc-options:
     - -threaded

@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import Klaraworks
 
 main :: IO ()
-main = someFunc
+main = putStrLn "nyaan"
