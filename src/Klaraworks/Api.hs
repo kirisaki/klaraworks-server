@@ -15,6 +15,8 @@ import           Klaraworks.Types
 import           Servant
 import           Servant.API
 import           Servant.API.Experimental.Auth
+import           WaiAppStatic.Storage.Filesystem
+import           WaiAppStatic.Types
 
 type KlaraWorksApi =
   "_api" :>
@@ -40,12 +42,13 @@ type KlaraWorksApi =
       --AuthProtect "cookie-auth" :> Capture "detailDir" Text :> ReqBody '[JSON] ApiDetail :> Put '[JSON] () :<|>
       --AuthProtect "cookie-auth" :> Capture "detailDir" Text :> Delete '[JSON] ()
     )
-  )
+  ):<|>
+  Raw
 
 runSql = undefined
   
 server :: Server KlaraWorksApi
-server = ( getWorksList :<|>
+server = (( getWorksList :<|>
            getWorks
          ):<|>
          ( postLogin :<|>
@@ -62,7 +65,8 @@ server = ( getWorksList :<|>
          --postDetail :<|>
          --putDetail :<|>
          --deleteDetail 
-         )
+         )):<|>
+         static
 
 getWorksList :: Text -> Handler [ApiWorksHeader]
 getWorksList language = do
@@ -157,3 +161,17 @@ getDetail detailDir = undefined
 
 --deleteDetail :: Account -> Dir -> Handler ()
 --deleteDetail acc detailDir  = undefined
+
+static :: Server Raw
+static =
+  let
+    settings = defaultWebAppSettings "static/"
+    indices = case toPiece "index.html" of
+      Just i  -> [i]
+      Nothing -> []
+    settings' = settings
+      { ssIndices = indices
+      , ssRedirectToIndex = False
+      }
+  in
+    serveDirectoryWith settings'
